@@ -30,3 +30,8 @@ const flowerShop = {
         return shop.join(' / ');
     }
 }
+
+
+//console.log(flowerShop.checkFlowersAvailable())
+
+module.exports = flowerShop;
