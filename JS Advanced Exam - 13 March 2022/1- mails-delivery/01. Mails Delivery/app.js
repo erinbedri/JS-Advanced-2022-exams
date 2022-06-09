@@ -5,56 +5,102 @@ function solve() {
 
     const addButton = document.getElementById('add');
     const resetButton = document.getElementById('reset');
-    
-    let unsortedListElement = document.getElementById('list');
-    let sentMailsElement = document.getElementsByClassName('sent-list')[0];
-    let deletedMailsElement = document.getElementsByClassName('delete-list')[0];
-    
-    //let listElementListOfMails = document.createElement('li');
-    let listElementSentMails = document.createElement('li');
-    //let listElementDeletedMails = document.createElement('li');
-    let listElementListOfMails = document.createElement('li');
 
-    let h4TitleElement = document.createElement('h4');
-    let h4RecipientElement = document.createElement('h4');
-    let spanElement = document.createElement('span');
+    let listMails = document.querySelector('.list-mails ul');
+    let sentMails = document.querySelector('.sent-mails ul');
+    let deletedMails = document.querySelector('.trash ul');
 
-    let sendButton = document.createElement('button');
-    let deleteButton = document.createElement('button');
-    let divElement = document.createElement('div');
-    let deleteBtn = document.createElement('button');
-    
     addButton.addEventListener('click', (event) => {
         event.preventDefault();
 
         if (recipientInput.value !== '' && titleInput.value !== '' && messageInput.value !== '') {
-
-            h4TitleElement.textContent = `Title: ${titleInput.value}`;
-            h4RecipientElement.textContent = `Recipient Name: ${recipientInput.value}`;
-            spanElement.textContent = messageInput.value;
             
-            sendButton.setAttribute('type', 'submit');
-            sendButton.setAttribute('id', 'send');
+            let li = document.createElement('li');
+
+            let h4Title = document.createElement('h4');
+            h4Title.textContent = 'Title: ' + `${titleInput.value}`;
+            li.appendChild(h4Title);
+
+            let h4Recipient = document.createElement('h4');
+            h4Recipient.textContent = 'Recipient Name: ' + `${recipientInput.value}`;
+            li.appendChild(h4Recipient);
+
+            let span = document.createElement('span');
+            span.textContent = messageInput.value;
+            li.appendChild(span);
+
+            let div = document.createElement('div');
+            div.id = 'list-action';
+
+            let sendButton = document.createElement('button');
             sendButton.textContent = 'Send';
-            
-            deleteButton.setAttribute('type', 'submit');
-            deleteButton.setAttribute('id', 'delete');
+            sendButton.type = 'Submit';
+            sendButton.id = 'send';
+            div.appendChild(sendButton);
+
+            let deleteButton = document.createElement('button');
             deleteButton.textContent = 'Delete';
+            deleteButton.type = 'Submit';
+            deleteButton.id = 'delete';
+            div.appendChild(deleteButton);
 
-            divElement.setAttribute('id', 'list-action');
-            divElement.appendChild(sendButton);
-            divElement.appendChild(deleteButton);
-
-            listElementListOfMails.appendChild(h4TitleElement);
-            listElementListOfMails.appendChild(h4RecipientElement);
-            listElementListOfMails.appendChild(spanElement);
-            listElementListOfMails.appendChild(divElement);
-
-            unsortedListElement.appendChild(listElementListOfMails);
+            li.appendChild(div);
+            listMails.appendChild(li);
 
             recipientInput.value = '';
             titleInput.value = '';
             messageInput.value = '';
+
+            sendButton.addEventListener('click', (event) => {
+                event.preventDefault();
+
+                let liEl = document.createElement('li');
+
+                let spanTo = document.createElement('span');
+                let recipientName = h4Recipient.textContent.split(': ')[1];
+                spanTo.textContent = 'To:' + recipientName;
+                liEl.appendChild(spanTo);
+
+                let spanTitle = document.createElement('span');
+                let titleText = h4Title.textContent.split(': ')[1];
+                spanTitle.textContent = 'Title:' + titleText;
+                liEl.appendChild(spanTitle);
+
+                let divBtn = document.createElement('div');
+                divBtn.className = 'btn';
+
+                let deleteBtn = document.createElement('button');
+                deleteBtn.textContent = 'Delete';
+                deleteBtn.type = 'Submit';
+                deleteBtn.id = 'delete';
+                divBtn.appendChild(deleteBtn);
+                liEl.appendChild(divBtn);
+                sentMails.appendChild(liEl);
+                
+                li.remove();
+
+                deleteBtn.addEventListener('click', () => {
+                    deleteBtn.parentElement.remove();
+                    deletedMails.appendChild(liEl);
+                })
+            })
+
+            deleteButton.addEventListener('click', () => {
+                let liDel = document.createElement('li');
+
+                let spanTo = document.createElement('span');
+                let recipientName = h4Recipient.textContent.split(': ')[1];
+                spanTo.textContent = 'To:' + recipientName;
+                liDel.appendChild(spanTo);
+
+                let spanTitle = document.createElement('span');
+                let titleText = h4Title.textContent.split(': ')[1];
+                spanTitle.textContent = 'Title:' + titleText;
+                liDel.appendChild(spanTitle);
+
+                li.remove();
+                deletedMails.appendChild(liDel);
+            })
         }
     })
 
@@ -66,70 +112,7 @@ function solve() {
         messageInput.value = '';
     })
 
-    sendButton.addEventListener('click', (event) => {
-        event.preventDefault();
-
-        let spanToElement = document.createElement('span');
-        let spanToText = h4RecipientElement.textContent.split(': ')[1];
-        spanToElement.textContent = `To: ${spanToText}`;
-
-        let spanTitleElement = document.createElement('span');
-        let spanTitleText = h4TitleElement.textContent.split(': ')[1];
-        spanTitleElement.textContent = `Title: ${spanTitleText}`;
-
-        let divBtnElement = document.createElement('div');
-        divBtnElement.setAttribute('class', 'btn');
-
-        deleteBtn.setAttribute('type', 'submit');
-        deleteBtn.setAttribute('class', 'delete');
-        deleteBtn.textContent = 'Delete';
-
-        divBtnElement.appendChild(deleteBtn);
-        listElementSentMails.appendChild(spanToElement);
-        listElementSentMails.appendChild(spanTitleElement);
-        listElementSentMails.appendChild(divBtnElement);
-        sentMailsElement.appendChild(listElementSentMails);
-
-        listElementListOfMails.remove();
-    })
-
-    deleteButton.addEventListener('click', () => {
-        let listElementDeletedMails = document.createElement('li');
-
-        let spanToElement = document.createElement('span');
-        let spanToText = h4RecipientElement.textContent.split(': ')[1];
-        spanToElement.textContent = `To: ${spanToText}`;
-
-        let spanTitleElement = document.createElement('span');
-        let spanTitleText = h4TitleElement.textContent.split(': ')[1];
-        spanTitleElement.textContent = `Title: ${spanTitleText}`;
-
-        deletedMailsElement.appendChild(listElementDeletedMails)
-
-        listElementDeletedMails.appendChild(spanToElement);
-        listElementDeletedMails.appendChild(spanTitleElement);
-
-        listElementListOfMails.remove();
-    })
-
-    deleteBtn.addEventListener('click', () => {
-        let listElementDeletedMails = document.createElement('li');
-
-        let spanToElement = document.createElement('span');
-        let spanToText = h4RecipientElement.textContent.split(': ')[1];
-        spanToElement.textContent = `To: ${spanToText}`;
-
-        let spanTitleElement = document.createElement('span');
-        let spanTitleText = h4TitleElement.textContent.split(': ')[1];
-        spanTitleElement.textContent = `Title: ${spanTitleText}`;
-
-        deletedMailsElement.appendChild(listElementDeletedMails)
-
-        listElementDeletedMails.appendChild(spanToElement);
-        listElementDeletedMails.appendChild(spanTitleElement);
-
-        listElementSentMails.remove();
-    })
 }
+
 
 solve()
