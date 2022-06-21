@@ -1,6 +1,6 @@
 class Restaurant {
     constructor(budget) {
-        this.budgetMoney = Number(budget);
+        this.budgetMoney = budget;
         this.menu = {};
         this.stockProducts = {};
         this.history = [];
@@ -20,15 +20,13 @@ class Restaurant {
                 } else {
                     this.stockProducts[productName] = productQuantity;
                 };
-
                 this.budgetMoney -= productTotalPrice;
                 result.push(`Successfully loaded ${productQuantity} ${productName}`);
-            };
-
-            result.push(`There was not enough money to load ${productQuantity} ${productName}`);
-
-            return result.join('\n');
+            } else {
+                result.push(`There was not enough money to load ${productQuantity} ${productName}`);
+            }
         })
+        return result.join('\n');
     };
 
     addToMenu(meal, neededProducts, price) {
@@ -51,9 +49,9 @@ class Restaurant {
     };
 
     showTheMenu() {
-        if (Object.keys(this.menu).length < 1) {
+        if (!Object.keys(this.menu).length) {
             return 'Our menu is not ready yet, please come later...';
-        }
+        };
 
         let result = [];
 
@@ -69,19 +67,19 @@ class Restaurant {
             return `There is not ${meal} yet in our menu, do you want to order something else?`;
         };
 
-        this.menu[meal].neededProducts.forEach(info => {
-            let [product, _] = info.split(' ');
-
-            if (!this.stockProducts.hasOwnProperty(product)) {
+        for (const data of this.menu[meal].neededProducts) {
+            let [product, quantity] = data.split(' ');
+            
+            if (!this.stockProducts.hasOwnProperty(product) || Number(quantity) > this.stockProducts[product]) {
                 return `For the time being, we cannot complete your order (${meal}), we are very sorry...`;
             };
-        });
+        };
 
-        this.menu[meal].neededProducts.forEach(info => {
-            let [product, quantity] = info.split(' ');
-
-            this.stockProducts -= Number(quantity);
-        });
+        for (const data of this.menu[meal].neededProducts) {
+            let [product, quantity] = data.split(' ');
+    
+            this.stockProducts[product] -= Number(quantity);
+        };
 
         this.budgetMoney += this.menu[meal].price;
         return `Your order (${meal}) will be completed in the next 30 minutes and will cost you ${this.menu[meal].price}.`
@@ -89,5 +87,15 @@ class Restaurant {
     }
 }
 
-let test = new Restaurant(1000);
-console.log(test.addToMenu('frozenYogurt', ['Yogurt 1', 'Honey 1', 'Banana 1', 'Strawberries 10'], 9.99));
+let kitchen = new Restaurant(1000);
+kitchen.loadProducts(['Yogurt 30 3', 'Honey 50 4', 'Strawberries 20 10', 'Banana 5 1']);
+kitchen.addToMenu('frozenYogurt', ['Yogurt 1', 'Honey 1', 'Banana 1', 'Strawberries 10'], 9.99);
+console.log(kitchen.makeTheOrder('frozenYogurt'));
+console.log(kitchen.makeTheOrder('frozenYogurt'));
+console.log(kitchen.makeTheOrder('frozenYogurt'));
+console.log(kitchen.makeTheOrder('frozenYogurt'));
+console.log(kitchen.makeTheOrder('frozenYogurt'));
+console.log(kitchen.makeTheOrder('frozenYogurt'));
+console.log(kitchen.makeTheOrder('frozenYogurt'));
+console.log(kitchen.makeTheOrder('frozenYogurt'));
+
