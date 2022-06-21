@@ -83,19 +83,6 @@ class Restaurant {
 
         this.budgetMoney += this.menu[meal].price;
         return `Your order (${meal}) will be completed in the next 30 minutes and will cost you ${this.menu[meal].price}.`
-
     }
 }
-
-let kitchen = new Restaurant(1000);
-kitchen.loadProducts(['Yogurt 30 3', 'Honey 50 4', 'Strawberries 20 10', 'Banana 5 1']);
-kitchen.addToMenu('frozenYogurt', ['Yogurt 1', 'Honey 1', 'Banana 1', 'Strawberries 10'], 9.99);
-console.log(kitchen.makeTheOrder('frozenYogurt'));
-console.log(kitchen.makeTheOrder('frozenYogurt'));
-console.log(kitchen.makeTheOrder('frozenYogurt'));
-console.log(kitchen.makeTheOrder('frozenYogurt'));
-console.log(kitchen.makeTheOrder('frozenYogurt'));
-console.log(kitchen.makeTheOrder('frozenYogurt'));
-console.log(kitchen.makeTheOrder('frozenYogurt'));
-console.log(kitchen.makeTheOrder('frozenYogurt'));
 
