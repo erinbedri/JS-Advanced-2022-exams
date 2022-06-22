@@ -19,9 +19,9 @@ class Story {
     };
 
     like(username) {
-        let user = this._likes.filter(user => user === username);
+        let user = this._likes.find(user => user === username);
 
-        if (!user) {
+        if (user) {
             throw new Error('You can\'t like the same story twice!');
         };
 
@@ -34,16 +34,78 @@ class Story {
     };
 
     dislike(username) {
-        let user = this._likes.filter(user => user == username);
+        let user = this._likes.find(user => user === username);
 
         if (!user) {
             throw new Error('You can\'t dislike this story!');
         };
 
-        this._likes = this._likes.filter(likes => likes != username);
+        this._likes = this._likes.filter(likes => likes !== username);
         return `${username} disliked ${this.title}`;
-    }
+    };
 
+    comment(username, content, id) {
+        let comment = this._comments.find(comment => comment.id === id);
+
+        if (id == undefined || !comment) {
+            let newComment = {
+                id: Number(this._comments.length + 1),
+                username,
+                content,
+                replies: []
+            }
+    
+            this._comments.push(newComment);
+            return `${username} commented on ${this.title}`;
+
+        } else if (comment) {
+            let totalReplies = comment.replies.length;
+
+            let newReply = {
+                id: Number(`${comment.id}.${totalReplies + 1}`), 
+                username, 
+                content
+            }
+
+            comment.replies.push(newReply);
+            return 'You replied successfully';
+        }
+    };
+
+    toString(sortingType) {
+        let result = [];
+        result.push(`Title: ${this.title}`);
+        result.push(`Creator: ${this.creator}`);
+        result.push(`Likes: ${this._likes.length}`);
+        result.push(`Comments:`);
+
+        if (sortingType == 'asc') {
+            this._comments = this._comments.sort((a, b) => (a.id - b.id || a.replies.id - b.replies.id));
+        } else if (sortingType == 'desc') {
+            this._comments = this._comments.sort((a, b) => (b.id - a.id || b.replies.id - a.replies.id));
+        } else if (sortingType == 'username') {
+            this._comments = this._comments.sort((a, b) => a.username.localeCompare(b.username));
+
+            this._comments.forEach(comment => {
+                comment.replies.sort((a, b) => a.username.localeCompare(b.username));
+            });
+
+        }
+
+        if (this._comments.length > 0) {
+            for (const comment of Object.values(this._comments)) {
+                result.push(`-- ${comment.id}. ${comment.username}: ${comment.content}`);
+
+                if (comment.replies.length > 0) {
+                    for (const reply of comment.replies) {
+                        result.push(`--- ${reply.id}. ${reply.username}: ${reply.content} `)
+                    }
+                }
+            }
+        }
+
+        return result.join('\n');
+    }
 
 }
 
@@ -54,11 +116,11 @@ art.dislike("John");
 console.log(art.likes);
 art.comment("Sammy", "Some Content");
 console.log(art.comment("Ammy", "New Content"));
-art.comment("Zane", "Reply", 1);
+art.comment("Zane", "Reply", 2);
 art.comment("Jessy", "Nice :)");
-console.log(art.comment("SAmmy", "Reply@", 1));
+console.log(art.comment("Ammy", "Reply@", 1));
 console.log()
 console.log(art.toString('username'));
 console.log()
 art.like("Zane");
-console.log(art.toString('desc'));
+console.log(art.toString('asc'));
