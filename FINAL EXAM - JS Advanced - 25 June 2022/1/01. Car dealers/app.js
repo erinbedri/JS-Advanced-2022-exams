@@ -27,51 +27,9 @@ function solve() {
 			sellingPriceElement.value != '' &&
 			Number(originalCostElement.value) <= Number(sellingPriceElement.value)) {
 
-			
-			let tr = document.createElement('tr');
-			tr.classList.add('row');
-			
-			let tdMake = document.createElement('td');
-			tdMake.textContent = makeElement.value;
-			tr.appendChild(tdMake);
+			let newElement = createHtmlElement();
 
-			let tdModel = document.createElement('td');
-			tdModel.textContent = modelElement.value;
-			tr.appendChild(tdModel);
-
-			let tdYear = document.createElement('td');
-			tdYear.textContent = yearElement.value;
-			tr.appendChild(tdYear);
-
-			let tdFuel = document.createElement('td');
-			tdFuel.textContent = fuelElement.value;
-			tr.appendChild(tdFuel);
-
-			let tdOriginalCost = document.createElement('td');
-			tdOriginalCost.textContent = originalCostElement.value;
-			tr.appendChild(tdOriginalCost);
-
-			let tdSellingPrice = document.createElement('td');
-			tdSellingPrice.textContent = sellingPriceElement.value;
-			tr.appendChild(tdSellingPrice);
-			
-			let tdButtons = document.createElement('td');
-
-			let editButton = document.createElement('button');
-			editButton.textContent = 'Edit';
-			editButton.classList.add('action-btn');
-			editButton.classList.add('edit');
-			tdButtons.appendChild(editButton);
-
-			let sellButton = document.createElement('button');
-			sellButton.textContent = 'Sell'
-			sellButton.classList.add('action-btn');
-			sellButton.classList.add('sell');
-			tdButtons.appendChild(sellButton);
-			
-			tr.appendChild(tdButtons);
-
-			tableBody.appendChild(tr);
+			tableBody.appendChild(newElement);
 
 			makeElement.value = '';
 			modelElement.value = '';
@@ -121,5 +79,51 @@ function solve() {
 			})
 		}
 
+		function createHtmlElement() {
+			let tr = document.createElement('tr');
+			tr.classList.add('row');
+			
+			let tdMake = document.createElement('td');
+			tdMake.textContent = makeElement.value;
+			tr.appendChild(tdMake);
+
+			let tdModel = document.createElement('td');
+			tdModel.textContent = modelElement.value;
+			tr.appendChild(tdModel);
+
+			let tdYear = document.createElement('td');
+			tdYear.textContent = yearElement.value;
+			tr.appendChild(tdYear);
+
+			let tdFuel = document.createElement('td');
+			tdFuel.textContent = fuelElement.value;
+			tr.appendChild(tdFuel);
+
+			let tdOriginalCost = document.createElement('td');
+			tdOriginalCost.textContent = originalCostElement.value;
+			tr.appendChild(tdOriginalCost);
+
+			let tdSellingPrice = document.createElement('td');
+			tdSellingPrice.textContent = sellingPriceElement.value;
+			tr.appendChild(tdSellingPrice);
+			
+			let tdButtons = document.createElement('td');
+
+			let editButton = document.createElement('button');
+			editButton.textContent = 'Edit';
+			editButton.classList.add('action-btn');
+			editButton.classList.add('edit');
+			tdButtons.appendChild(editButton);
+
+			let sellButton = document.createElement('button');
+			sellButton.textContent = 'Sell'
+			sellButton.classList.add('action-btn');
+			sellButton.classList.add('sell');
+			tdButtons.appendChild(sellButton);
+			
+			tr.appendChild(tdButtons);
+
+			return tr;
+		};
 	})
 }
